@@ -1,0 +1,41 @@
+<div
+  data-testid="board"
+  class="board"
+  (click)="onBoardClick($event)"
+>
+  <div data-testid="user-count" class="user-count">{{ userCount }} users online</div>
+
+  @for (note of notes) {
+    <div
+      [attr.data-testid]="'note-' + note.id"
+      class="note"
+      [class.editing]="editingId === note.id"
+      [style.left.px]="note.x"
+      [style.top.px]="note.y"
+      (click)="onNoteClick(note, $event)"
+    >
+      <textarea
+        [attr.data-testid]="'note-text-' + note.id"
+        class="note-text"
+        [(ngModel)]="editTexts[note.id]"
+        [readonly]="editingId !== note.id"
+      ></textarea>
+
+      @if (editingId === note.id) {
+        <div class="note-actions">
+          @if (isDirty(note.id)) {
+            <button
+              [attr.data-testid]="'note-save-' + note.id"
+              class="btn-save"
+              (click)="saveNote(note.id, $event)"
+            >Save</button>
+          }
+          <button
+            [attr.data-testid]="'note-delete-' + note.id"
+            class="btn-delete"
+            (click)="deleteNote(note.id, $event)"
+          >Delete</button>
+        </div>
+    </div>
+  }
+</div>
